@@ -11,13 +11,9 @@ function seo(path,title,desc,noindex){var url=SITE+(path==='/'?'/':path);documen
 function route(){var h=location.pathname.replace(/^\/+|\/+$/g,''),parts=h.split('/'),p=parts[0]==='projects',s=parts[0]==='start',u=parts[0]==='uiux',cl=parts[0]==='client'&&parts[1]==='cybitronix-x7k2q9',ct=parts[0]==='contact';if(p)setDisc(parts[1]||'graphics');if(s)setForm(parts[1]);if(u)setCase(parts[1]);
 var cur=cl?'preview':ct?'contact':s?'start':u?'case':p?'projects':'home';views.forEach(function(v){v.hidden=v.dataset.view!==cur});document.documentElement.classList.toggle('is-contact',ct);
 document.getElementById('nh').setAttribute('aria-current',cur==='home'?'page':'false');document.getElementById('np').setAttribute('aria-current',cur==='projects'||cur==='case'?'page':'false');document.getElementById('mh').setAttribute('aria-current',cur==='home'?'page':'false');document.getElementById('mp').setAttribute('aria-current',cur==='projects'||cur==='case'?'page':'false');
-var disc=DN[parts[1]]?parts[1]:'graphics',path='/',title,desc=BASE_DESC,noidx=false;
-if(cl){path='/'+h;title='Cybitronix logo | '+NAME;noidx=true;desc='Private logo preview.'}
-else if(ct){path='/contact';title='Contact | '+NAME+', designer in Ibadan';desc='Contact Babarinde Abdur-Roheem about a graphics, logo, motion or UI/UX design project. WhatsApp and email.'}
-else if(s){var sk=['logo','graphics','uiux'].indexOf(parts[1])>-1?parts[1]:'';path='/start'+(sk?'/'+sk:'');title=(sk?'Start a '+DN[sk].toLowerCase()+' project':'Start a project')+' | '+NAME;desc='Fill in a short brief to start a '+(sk?DN[sk].toLowerCase()+' ':'')+'design project with Babarinde Abdur-Roheem.'}
-else if(u){var cv=document.querySelector('.case:not([hidden]) h2.h1');path='/uiux/'+(parts[1]||'');title=(cv?cv.textContent+' UI/UX case study':'UI/UX case study')+' | '+NAME;desc=(cv?cv.textContent+': ':'')+'UI/UX case study by Babarinde Abdur-Roheem, covering the problem, process and final screens.'}
-else if(p){path=parts[1]&&DN[parts[1]]?'/projects/'+parts[1]:'/projects';title=(parts[1]&&DN[parts[1]]?DN[parts[1]]+' projects':'Projects')+' | '+NAME;desc=parts[1]&&DN[parts[1]]?DN[parts[1]]+' work by Babarinde Abdur-Roheem, grouped by client. Tap a piece to see it full size.':'Every design by Babarinde Abdur-Roheem, grouped by client: flyers, logos, motion and UI/UX.'}
-else{title=NAME+' | Graphics, Logo, Motion and UI/UX Designer'}
+var path='/';
+if(cl)path='/'+h;else if(ct)path='/contact';else if(s)path='/start'+(['logo','graphics','uiux'].indexOf(parts[1])>-1?'/'+parts[1]:'');else if(u){var vc=document.querySelector('.case:not([hidden])');path='/uiux/'+(vc?vc.dataset.c:parts[1]||'')}else if(p)path='/projects'+(DN[parts[1]]?'/'+parts[1]:'');
+var R=(window.ROUTES||{})[path]||(window.ROUTES||{})['/']||{title:document.title,description:BASE_DESC};var title=R.title,desc=R.description,noidx=!!R.noindex;
 seo(path,title,desc,noidx);
 $('h2.h1').forEach(function(e){e.setAttribute('role','heading');e.setAttribute('aria-level',e.offsetParent!==null?'1':'2')});
 window.scrollTo(0,0);window.dispatchEvent(new Event('routechange'))}

@@ -1,13 +1,15 @@
 // Dependency-free static server for the portfolio (Node 18+).
-// Usage: npm start   (PORT env var optional, default 3000)
+// Builds dist/ then serves it. Usage: npm start   (PORT env var optional, default 3000)
 import { createServer } from 'node:http';
 import { createReadStream, statSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { build } from './scripts/build.js';
 import { createGzip } from 'node:zlib';
 
-const ROOT = resolve(fileURLToPath(new URL('./public', import.meta.url)));
+const ROOT = resolve(fileURLToPath(new URL('./dist', import.meta.url)));
 const PORT = process.env.PORT || 3000;
+build(); // regenerate dist/ on every start
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',

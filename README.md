@@ -1,27 +1,33 @@
 # Babarinde Abdur-Roheem – Portfolio
 
-A Node.js project with no dependencies to install (Node 18+).
+Node.js project, no dependencies to install (Node 18+).
 
 ```bash
-npm start            # http://localhost:3000
+npm start            # builds dist/ then serves http://localhost:3000
 PORT=8080 npm start  # custom port
+npm run dev          # same, restarts when you edit src/, scripts/ or site.config.js
+npm run build        # only generate dist/ (what Vercel runs)
 ```
 
-## Structure
-- `server.js` – small static server (gzip, caching, safe paths)
-- `public/index.html` – all page markup (Home, Projects, Start forms, Case study, Contact)
-- `public/css/base.css` – original site styles (palette, buttons, grids, forms)
-- `public/css/home.css` – Home page scroll sections + nav
-- `public/js/app.js` – hash routing, lightbox, forms, theme toggle, reveal effects
-- `public/js/home-scroll.js` – scroll-driven 3D engine for the Home page
-- `public/images/` – all images (`pN.webp` = the project pieces)
+## How it works
+`scripts/build.js` turns `src/index.html` into **one real HTML file per URL** in `dist/`
+(`/`, `/projects`, `/projects/logo`, `/start/logo`, `/uiux/astra`, `/contact` …). Each file has its own
+`<title>`, description, canonical link, Open Graph/Twitter tags and exactly one `<h1>`, so crawlers
+that don't run JavaScript see unique pages. It also writes `sitemap.xml` and `robots.txt`.
+In the browser, `src/js/app.js` handles navigation without reloads and keeps the same titles/tags.
 
-Tools shown in "My Creative Tools" are plain markup in `public/index.html` (`.h-tool`).
+## Where to edit
+- `site.config.js` – every page's title and description, and the site URL (`SITE`). Keep titles 30–60 characters and unique. The build warns if not.
+- `src/index.html` – all page markup. Tools in "My Creative Tools" are the `.h-tool` blocks.
+- `src/css/base.css` – original styles; `src/css/home.css` – Home page scroll sections + nav.
+- `src/js/app.js` – routing, lightbox, forms, theme toggle; `src/js/home-scroll.js` – Home page 3D scroll engine.
+- `src/images/` – all images (`pN.webp` = project pieces), `src/og-image.png` – share image.
 
-Note: `public/index.html` loads a third-party tracking/popup script from `pulse-v2-zeta.vercel.app` (it was in the original file). They sit at the very top of `<head>` on every page, so keep them there.
+New case study or page? Add it to `src/index.html`; case studies (`<article class="case" data-c="slug">`) are picked up automatically.
+If you change domain, update `SITE` in `site.config.js` and the canonical/og tags in the `<head>` of `src/index.html`.
 
-## SEO / URLs
-- Real paths (`/projects`, `/projects/logo`, `/start/logo`, `/uiux/astra`, `/contact`) instead of `#/` links; old `#/` links still redirect.
-- `public/sitemap.xml` and `public/robots.txt` (points to the sitemap). Update the domain in both, in the `<head>` tags of `public/index.html`, and in `SITE` at the top of the routing code in `public/js/app.js` if you move off `babarinde.vercel.app`.
-- Each page updates its title, description, canonical and Open Graph/Twitter tags (`public/og-image.png` is the share image).
-- `vercel.json` serves `public/` and sends every path to `index.html` so deep links work on Vercel.
+## Deploy
+Vercel: import the folder; `vercel.json` already runs `npm run build` and serves `dist/`.
+Any Node host: `npm start`.
+
+Note: `src/index.html` loads a third-party tracking/popup script from `pulse-v2-zeta.vercel.app` at the very top of `<head>` (from the original file). Keep it first.
