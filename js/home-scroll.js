@@ -191,7 +191,7 @@
   function relayout() { vw = innerWidth; vh = innerHeight; kick(); }
   addEventListener('scroll', kick, { passive: true });
   addEventListener('resize', relayout);
-  addEventListener('hashchange', function () { setTimeout(kick, 30); });
+  addEventListener('routechange', function () { setTimeout(kick, 30); });
   addEventListener('load', kick);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(kick);
   kick();
