@@ -1,0 +1,15 @@
+{
+  "name": "abdur-roheem-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Portfolio of Babarinde Abdur-Roheem, designer in Ibadan, Nigeria",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "start": "node server.js",
+    "dev": "node --watch-path=src --watch-path=scripts --watch-path=site.config.js server.js"
+  }
+}
